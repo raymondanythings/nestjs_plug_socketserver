@@ -1,7 +1,8 @@
-import { SocketAdapter } from './socket/socket.adapter';
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
+import { LoggerModule } from './logger/logger.module'
+import { SocketModule } from './socket/socket.module'
 
 @Module({
-  imports: [SocketAdapter],
+  imports: [SocketModule, LoggerModule.forRoot()],
 })
 export class AppModule {}
