@@ -1,4 +1,5 @@
 import { Logger } from '@nestjs/common'
+import { Inject } from '@nestjs/common'
 import {
   ConnectedSocket,
   MessageBody,
@@ -9,7 +10,8 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets'
-import { Server, Socket } from 'socket.io'
+import { Namespace, Server, Socket } from 'socket.io'
+import { SocketService } from './socket.service'
 
 @WebSocketGateway(3001, {
   cors: { origin: '*' },
@@ -19,13 +21,23 @@ import { Server, Socket } from 'socket.io'
 export class SocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private readonly socketService: SocketService) {}
+
   @WebSocketServer()
-  server: Server
+  server: Namespace
   private logger: Logger = new Logger('appGateway')
+  public roomList = []
 
   @SubscribeMessage('test')
   handleTest(@MessageBody() data: { test: string | number }) {
     this.logger.log('data', data)
+    console.log(this.server.server.sockets.adapter)
+    // const {
+    //   sockets: {
+    //     adapter: { sids, rooms },
+    //   },
+    // } = this.server
+    // this.roomList = this.socketService.getPublicRooms(rooms, sids)
   }
 
   afterInit(server: Server) {

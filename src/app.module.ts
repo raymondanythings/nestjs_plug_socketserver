@@ -3,6 +3,6 @@ import { LoggerModule } from './logger/logger.module'
 import { SocketModule } from './socket/socket.module'
 
 @Module({
-  imports: [SocketModule, LoggerModule.forRoot()],
+  imports: [LoggerModule.forRoot(), SocketModule],
 })
 export class AppModule {}
